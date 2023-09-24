@@ -89,7 +89,7 @@ UICL_MSG      (TUT1, 0,
 #define CATEGORY "FILM SETUP" ////////////////////
 //////////////////////////////////////////////////
 #if (CUSTOM_PRESET_ENABLED == 0)
-UICL_COMBO    (FILM_NEGATIVE, "Negative",       "",  18, 0,
+UICL_COMBO    (FILM_NEGATIVE, "Negative",       "",  NEGATIVE_DEFAULT, 0,
                   NEGATIVE_LIST)
 UICL_COMBO    (FILM_FORMATN, "Negative Format", "", 1, 0,
                     "16mm\0"
@@ -105,7 +105,7 @@ UICL_MSG      (WBMASG, 0,
 " according to the real world white balance\n"
 " of your selected film negative.")
 
-UICL_COMBO    (FILM_PRINT, "Print",     "",  12, 0,
+UICL_COMBO    (FILM_PRINT, "Print",     "",  PRINT_DEFAULT, 0,
                   PRINT_LIST)
 UICL_COMBO    (FILM_FORMATP, "Print Format", "", 2, 0,
                    "16mm\0"
@@ -116,7 +116,7 @@ UICL_FLOAT_S  (PRT_EXP,       "Print Exposure",       "", -4.0, 4.0,   0.0,   0)
 UICL_INT_S    (P_TEMP,        "Print Color Temperature", "", 3200, 9800, 6500, 0)
 UICL_MSG      (PATREON2,       0, PATREON_NAG)
 #else
-UICL_COMBO    (FILM_NEGATIVE, "Negative",     "",  18, 0,
+UICL_COMBO    (FILM_NEGATIVE, "Negative",     "",  NEGATIVE_DEFAULT, 0,
                   CUSTOM_LIST_N)
 UICL_COMBO    (FILM_FORMATN, "Negative Format", "", 1, 0,
                    "16mm\0"
@@ -128,7 +128,7 @@ UICL_INT_S    (N_TEMP,        "Negative Color Temperature", "", 3200, 9800, 6500
 UICL_COMBOOL  (AUTO_TEMP,     "Use Film Negative Whitebalance", "", 1, 0)
 UICL_MSG      (PATREON,       0, PATREON_NAG)
 
-UICL_COMBO    (FILM_PRINT, "Print",     "",  12, 0,
+UICL_COMBO    (FILM_PRINT, "Print",     "",  PRINT_DEFAULT, 0,
                   CUSTOM_LIST_P)
 UICL_COMBO    (FILM_FORMATP, "Print Format", "", 2, 0,
                    "16mm\0"

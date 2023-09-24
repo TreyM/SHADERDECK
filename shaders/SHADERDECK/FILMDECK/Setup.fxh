@@ -213,12 +213,14 @@ FilmStruct K2302()
 
 // STANDARD NEGATIVE AND PRINT LISTS //////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+#define NEGATIVE_DEFAULT 1
 #define NEGATIVE_LIST \
     "Bypass\0" \
     "Kodak VISION3 250D 5207\0" \
     "Kodak VISION3 200T 5213\0" \
     "Fuji Reala 500D 8592\0"
 
+#define PRINT_DEFAULT 1
 #define PRINT_LIST \
     "Bypass\0" \
     "KODAK VISION Color Print Film 2383\0" \
