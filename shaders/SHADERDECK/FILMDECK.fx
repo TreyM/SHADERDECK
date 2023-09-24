@@ -294,15 +294,30 @@ VOID (Downscale, float4 scaled)
 {
     // FILM SOFTENING ///////////////////////////
     /////////////////////////////////////////////
-    if ((ENABLE_RES > 0) && ((FILM_NEGATIVE > 0) || (FILM_PRINT > 0)))
-    {
-        scaled = tex2Dbicub(TextureColorLinear, SCALE(uv, 0.5)); // Linearized cbuffer
-    }
+    #if (BUFFER_COLOR_BIT_DEPTH > 8)
 
-    else
-    {
-        scaled = tex2D(TextureColorLinear, uv); // Linearized cbuffer
-    }
+        if ((ENABLE_RES > 0) && ((FILM_NEGATIVE > 0) || (FILM_PRINT > 0)))
+        {
+            scaled = tex2Dbicub(TextureColorLinear, SCALE(uv, 0.5)); // Linearized cbuffer
+        }
+
+        else
+        {
+            scaled = tex2D(TextureColorLinear, uv); // Linearized cbuffer
+        }
+    #else
+        if ((ENABLE_RES > 0) && ((FILM_NEGATIVE > 0) || (FILM_PRINT > 0)))
+        {
+            scaled = tex2Dbicub(TextureColor, SCALE(uv, 0.5)); // Linearized cbuffer
+        }
+
+        else
+        {
+            scaled = tex2D(TextureColor, uv); // Linearized cbuffer
+        }
+
+        scaled = SRGBToLinear(scaled);
+    #endif
 }
 
 VOID (Upscale, float4 color)
@@ -312,7 +327,11 @@ VOID (Upscale, float4 color)
 
     // LINEAR CBUFFER ///////////////////////////
     /////////////////////////////////////////////
-    color      = tex2D(TextureColorLinear, uv);
+    #if (BUFFER_COLOR_BIT_DEPTH > 8)
+        color  = SRGBToLinear(tex2D(TextureColor, uv));
+    #else
+        color  = tex2D(TextureColorLinear, uv);
+    #endif
 
 
     // FILM PROFILE ARRAY ///////////////////////
@@ -435,7 +454,11 @@ VOID (FilmDeck, float4 film)
     // but since I'm working with non-HDR input data,
     // I mask for luminance to preserve highlights
     // The effect is only applied to the shadows and mids
-    pmask     = GetLuma(tex2D(TextureColorLinear, uv));
+    #if (BUFFER_COLOR_BIT_DEPTH > 8)
+        pmask  = GetLuma(SRGBToLinear(tex2D(TextureColor, uv)));
+    #else
+        pmask  = GetLuma(tex2D(TextureColorLinear, uv));
+    #endif
     if ((PUSH_MODE < 1) && (FILM_NEGATIVE > 0) && (FILM_PRINT > 0))
     {
         film  *= exp2(NEG_EXP);
