@@ -94,10 +94,10 @@ UICL_COMBO    (FILM_NEGATIVE, "Negative",       "",  NEGATIVE_DEFAULT, 0,
 UICL_COMBO    (FILM_FORMATN, "Negative Format", "", 1, 0,
                     "16mm\0"
                     "Super 35\0"
-                    "35mm\0")
-UICL_INT_S    (GRAIN_N,       "Negative Grain", "", 0, 100, 30, 0)
+                    "35mm Full Frame\0")
+UICL_INT_S    (GRAIN_N,       "Negative Grain", "", 0, 100, 50, 0)
 UICL_FLOAT_S  (NEG_EXP,       "Negative Exposure",    "", -4.0, 4.0,   0.0,   0)
-UICL_INT_S    (N_TEMP,        "Negative Color Temperature", "", 3200, 9800, 6500, 0)
+UICL_INT_S    (N_TEMP,        "Negative Color Temperature", "", -100, 100, 0, 0)
 UICL_COMBOOL  (AUTO_TEMP,     "Use Film Negative Whitebalance", "", 0, 0)
 UICL_MSG      (WBMASG, 0,
 " This will force FILMDECK to white balance\n"
@@ -110,34 +110,42 @@ UICL_COMBO    (FILM_PRINT, "Print",     "",  PRINT_DEFAULT, 0,
 UICL_COMBO    (FILM_FORMATP, "Print Format", "", 2, 0,
                    "16mm\0"
                    "Super 35\0"
-                   "35mm\0")
-UICL_INT_S    (GRAIN_P,       "Print Grain", "", 0, 100, 30, 0)
+                   "35mm Full Frame\0")
+UICL_INT_S    (GRAIN_P,       "Print Grain", "", 0, 100, 50, 0)
 UICL_FLOAT_S  (PRT_EXP,       "Print Exposure",       "", -4.0, 4.0,   0.0,   0)
-UICL_INT_S    (P_TEMP,        "Print Color Temperature", "", 3200, 9800, 6500, 0)
-UICL_MSG      (PATREON2,       0, PATREON_NAG)
+UICL_INT_S    (P_TEMP,        "Print Color Temperature", "", -100, 100, 0, 0)
+#ifdef __PATREON_NAG
+    UICL_MSG      (PATREON2,       0, __PATREON_NAG)
+#endif
 #else
 UICL_COMBO    (FILM_NEGATIVE, "Negative",     "",  NEGATIVE_DEFAULT, 0,
                   CUSTOM_LIST_N)
 UICL_COMBO    (FILM_FORMATN, "Negative Format", "", 1, 0,
                    "16mm\0"
                    "Super 35\0"
-                   "35mm\0")
+                   "35mm Full Frame\0")
 UICL_INT_S    (GRAIN_N,       "Negative Grain", "", 0, 100, 30, 0)
 UICL_FLOAT_S  (NEG_EXP,       "Negative Exposure",    "", -4.0, 4.0,   0.0,   0)
-UICL_INT_S    (N_TEMP,        "Negative Color Temperature", "", 3200, 9800, 6500, 0)
+UICL_INT_S    (N_TEMP,        "Negative Color Temperature", "", -100, 100, 0, 0)
 UICL_COMBOOL  (AUTO_TEMP,     "Use Film Negative Whitebalance", "", 1, 0)
-UICL_MSG      (PATREON,       0, PATREON_NAG)
+UICL_MSG      (WBMASG, 0,
+" This will force FILMDECK to white balance\n"
+" the image as it goes into the Negative profile\n"
+" according to the real world white balance\n"
+" of your selected film negative.")
 
 UICL_COMBO    (FILM_PRINT, "Print",     "",  PRINT_DEFAULT, 0,
                   CUSTOM_LIST_P)
 UICL_COMBO    (FILM_FORMATP, "Print Format", "", 2, 0,
                    "16mm\0"
                    "Super 35\0"
-                   "35mm\0")
+                   "35mm Full Frame\0")
 UICL_INT_S    (GRAIN_P,       "Print Grain", "", 0, 100, 30, 0)
 UICL_FLOAT_S  (PRT_EXP,       "Print Exposure",       "", -4.0, 4.0,   0.0,   0)
-UICL_INT_S    (P_TEMP,        "Print Color Temperature", "", 3200, 9800, 6500, 0)
-UICL_MSG      (PATREON2,       0, PATREON_NAG)
+UICL_INT_S    (P_TEMP,        "Print Color Temperature", "", -100, 100, 0, 0)
+#ifdef __PATREON_NAG
+    UICL_MSG      (PATREON2,       0, __PATREON_NAG)
+#endif
 #endif
 
 
@@ -162,18 +170,18 @@ UICL_COLOR    (LIFT,         "Shadows",         "",  0.5, 0.5, 0.5, 0)
 "Editing is easiest using the widget\n" \
 "Click the colored box to open it."
 UICL_COLOR    (GREYS,        "Grey",            "Tint grey tones",  0.50, 0.50, 0.50, 5)
-UICL_COLOR    (HUERed,       "Red",             HSL_TOOLTIP,  0.75, 0.25, 0.25, 0)
-UICL_COLOR    (HUEOrange,    "Orange",          HSL_TOOLTIP,  0.75, 0.50, 0.25, 0)
-UICL_COLOR    (HUEYellow,    "Yellow",          HSL_TOOLTIP,  0.75, 0.75, 0.25, 0)
-UICL_COLOR    (HUEGreen,     "Green",           HSL_TOOLTIP,  0.25, 0.75, 0.25, 0)
-UICL_COLOR    (HUECyan,      "Cyan",            HSL_TOOLTIP,  0.25, 0.75, 0.75, 0)
-UICL_COLOR    (HUEBlue,      "Blue",            HSL_TOOLTIP,  0.25, 0.25, 0.75, 0)
-UICL_COLOR    (HUEPurple,    "Purple",          HSL_TOOLTIP,  0.50, 0.25, 0.75, 0)
-UICL_COLOR    (HUEMagenta,   "Magenta",         HSL_TOOLTIP,  0.75, 0.25, 0.75, 0)
+UICL_COLOR    (HUERed,       "Red",             HSL_TOOLTIP,        0.75, 0.25, 0.25, 0)
+UICL_COLOR    (HUEOrange,    "Orange",          HSL_TOOLTIP,        0.75, 0.50, 0.25, 0)
+UICL_COLOR    (HUEYellow,    "Yellow",          HSL_TOOLTIP,        0.75, 0.75, 0.25, 0)
+UICL_COLOR    (HUEGreen,     "Green",           HSL_TOOLTIP,        0.25, 0.75, 0.25, 0)
+UICL_COLOR    (HUECyan,      "Cyan",            HSL_TOOLTIP,        0.25, 0.75, 0.75, 0)
+UICL_COLOR    (HUEBlue,      "Blue",            HSL_TOOLTIP,        0.25, 0.25, 0.75, 0)
+UICL_COLOR    (HUEPurple,    "Purple",          HSL_TOOLTIP,        0.50, 0.25, 0.75, 0)
+UICL_COLOR    (HUEMagenta,   "Magenta",         HSL_TOOLTIP,        0.75, 0.25, 0.75, 0)
 
 UICL_INT_S    (CONTRAST,     "Contrast",        "", -100, 100,   0, 5)
 UICL_FLOAT_S  (OUT_GAMMA,    "Gamma",           "Midtones brightness", 0.01, 2.0, 1.0, 0)
-UICL_INT2_S   (LEVELS,       "Levels",          "Blacks Point | White point", -100, 100,   0, 0, 0)
+UICL_INT2_S   (LEVELS,       "Levels",          "Black Point | White point", -100, 100,   0, 0, 0)
 
 UICL_COMBOOL  (CLIP_CAL,     "Clipping Guides",  "", 0, 5)
 UICL_COMBOOL  (GREY_CAL,     "Grey Calibration", "", 0, 0)
@@ -236,7 +244,7 @@ UICL_MSG      (WVMSG, 0,
 UICL_COMBOOL  (ENABLE_FLK,    "Image Flicker", "", 0, 0)
 UICL_INT_S    (FLK_INT,       "Filcker Intensity", "", 0, 100, 50, 0)
 UICL_MSG      (FLKMSG, 0,
-" This enables a very subtle image flicker, mimmicking\n"
+" This enables a very subtle image flicker, mimicking\n"
 " a film projector. Take care, it could cause headaches.")
 
 #undef CATEGORY /////////////////////////////////
@@ -252,8 +260,7 @@ UICL_MSG      (INFO1, 0,
 "       but the game uses an RGB10A2 color buffer.")
 UICL_MSG      (INFO2, 0,
 "   SWAPCHAIN_PRECISION\n"
-"       0 = Use game's internal bit depth (not recommended)\n"
-"       1 = RGB10A2 - 10-bit\n"
+"       1 = Use game's internal bit depth (not recommended)\n"
 "       2 = RGBA16  - 16-bit (default mode)\n"
 "       3 = RGBA16F - 16-bit float")
 #undef CATEGORY /////////////////////////////////
@@ -269,23 +276,13 @@ UICL_MSG      (INFO2, 0,
 #include "SHADERDECK/Functions/GaussianBlurBounds.fxh"
 #include "SHADERDECK/Functions/Grain.fxh"
 #include "SHADERDECK/Functions/HSLShift.fxh"
-#include "TriDither.fxh"
+#include "SHADERDECK/Functions/TriDither.fxh"
 
 
 // RENDERTARGETS //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 RENDERTARGET(Swapchain1, BUFFER_WIDTH, BUFFER_HEIGHT, INTERNAL_DEPTH,     MIRROR)
 RENDERTARGET(Swapchain2, BUFFER_WIDTH, BUFFER_HEIGHT, INTERNAL_DEPTH,     MIRROR)
-RENDERTARGET(Blur1,      BUFFER_WIDTH, BUFFER_HEIGHT, INTERNAL_DEPTH_1CH, MIRROR)
-RENDERTARGET(Blur2,      BUFFER_WIDTH, BUFFER_HEIGHT, INTERNAL_DEPTH_1CH, MIRROR)
-
-
-// TEXTURES & SAMPLERS ////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-TEXTURE_SRC (TexCook, "SHADERDECK/LETMECOOK/ross.png")
-TEXTURE_SRC (TexWm, "SHADERDECK/wm.png")
-SAMPLER     (TextureCook, TexCook)
-SAMPLER     (TextureWatermark, TexWm)
 
 
 // SHADERS ////////////////////////////////////////////////////////////////////////////////////////
@@ -294,30 +291,17 @@ VOID (Downscale, float4 scaled)
 {
     // FILM SOFTENING ///////////////////////////
     /////////////////////////////////////////////
-    #if (BUFFER_COLOR_BIT_DEPTH > 8)
+    if ((ENABLE_RES > 0) && ((FILM_NEGATIVE > 0) || (FILM_PRINT > 0)))
+    {
+        scaled = tex2Dbicub(TextureColor, SCALE(uv, 0.5)); // Linearized cbuffer
+    }
 
-        if ((ENABLE_RES > 0) && ((FILM_NEGATIVE > 0) || (FILM_PRINT > 0)))
-        {
-            scaled = tex2Dbicub(TextureColorLinear, SCALE(uv, 0.5)); // Linearized cbuffer
-        }
+    else
+    {
+        scaled = tex2D(TextureColor, uv); // Linearized cbuffer
+    }
 
-        else
-        {
-            scaled = tex2D(TextureColorLinear, uv); // Linearized cbuffer
-        }
-    #else
-        if ((ENABLE_RES > 0) && ((FILM_NEGATIVE > 0) || (FILM_PRINT > 0)))
-        {
-            scaled = tex2Dbicub(TextureColor, SCALE(uv, 0.5)); // Linearized cbuffer
-        }
-
-        else
-        {
-            scaled = tex2D(TextureColor, uv); // Linearized cbuffer
-        }
-
-        scaled = SRGBToLinear(scaled);
-    #endif
+    scaled = SRGBToLinear(scaled);
 }
 
 VOID (Upscale, float4 color)
@@ -327,11 +311,7 @@ VOID (Upscale, float4 color)
 
     // LINEAR CBUFFER ///////////////////////////
     /////////////////////////////////////////////
-    #if (BUFFER_COLOR_BIT_DEPTH > 8)
-        color  = SRGBToLinear(tex2D(TextureColor, uv));
-    #else
-        color  = tex2D(TextureColorLinear, uv);
-    #endif
+    color  = SRGBToLinear(tex2D(TextureColor, uv));
 
 
     // FILM PROFILE ARRAY ///////////////////////
@@ -342,9 +322,9 @@ VOID (Upscale, float4 color)
     // FILM SOFTENING ///////////////////////////
     /////////////////////////////////////////////
     if ((ENABLE_RES > 0) && ((FILM_NEGATIVE > 0) || (FILM_PRINT > 0))) // We blend in linearspace to avoid darkening the edges where
-    {                   // softening is most noticeable
+    {                                                                  // softening is most noticeable
         res    = (ENABLE_RES == 1)
-               ? lerp(0.0, 1.0, (FILM_FORMATN * 0.25) + (FILM_FORMATP * 0.25))//(NegativeProfile[FILM_NEGATIVE - 1].resolution * 0.005)
+               ? lerp(0.0, 1.0, (FILM_FORMATN * 0.25) + (FILM_FORMATP * 0.25))
                : (RESOLUTION * 0.005);
         soften = tex2Dbicub(TextureSwapchain1, SCALE(uv, (1.0 / 0.5)));
         mask   = pow(smoothstep(0.1, 1.0, GetLuma(LinearToSRGB(color.rgb))), 0.75);
@@ -368,13 +348,18 @@ VOID (Upscale, float4 color)
     }
 }
 
-VOID (Halate1, float halation)
+VOID (Halate1, float4 color)
 {
-    float width;
+    float halation, width;
 
     // FILM PROFILE ARRAY ///////////////////////
     /////////////////////////////////////////////
     #include FILM_PROFILES
+
+
+    // INPUT IMAGE //////////////////////////////
+    /////////////////////////////////////////////
+    color = tex2D(TextureSwapchain2, uv);
 
 
     // HALATION HORIZONTAL BLUR /////////////////
@@ -384,22 +369,29 @@ VOID (Halate1, float halation)
         width    = (ENABLE_HAL == 1)
                  ? (NegativeProfile[FILM_NEGATIVE - 1].halation.z * 0.01)
                  : (HAL_WDT * 0.01);
-        halation = HalateH(tex2D(TextureSwapchain2, uv).a, TextureSwapchain2, width, BoundsMid, uv);
+        halation = HalateH(color.a, TextureSwapchain2, width, BoundsMid, uv);
     }
 
     else
     {
         halation = 0.0;
     }
+
+    color.a = halation;
 }
 
-VOID (Halate2, float halation)
+VOID (Halate2, float4 color)
 {
-    float width;
+    float halation, width;
 
     // FILM PROFILE ARRAY ///////////////////////
     /////////////////////////////////////////////
     #include FILM_PROFILES
+
+
+    // INPUT IMAGE //////////////////////////////
+    /////////////////////////////////////////////
+    color = tex2D(TextureSwapchain1, uv);
 
 
     // HALATION VERTICAL BLUR ///////////////////
@@ -409,25 +401,27 @@ VOID (Halate2, float halation)
         width    = (ENABLE_HAL == 1)
                  ? (NegativeProfile[FILM_NEGATIVE - 1].halation.z * 0.01)
                  : (HAL_WDT * 0.01);
-        halation = HalateV(tex2D(TextureBlur1, uv), TextureBlur1, width, BoundsMid, uv);
+        halation = HalateV(color.a, TextureSwapchain1, width, BoundsMid, uv);
     }
 
     else
     {
         halation = 0.0;
     }
+
+    color.a = halation;
 }
 
 VOID (FilmDeck, float4 film)
 {
-    float  luma, pmask, avg;
+    float  luma, pmask, avg, ntemp, ptemp;
     float3 halate;
-    float3 orig, lift, gamma, gain, grey, hsv;
+    float3 orig, lift, gamma, gain, grey, hsl;
 
     // INPUT TEXTURES ///////////////////////////
     /////////////////////////////////////////////
     film = tex2D(TextureSwapchain2, uv); // Buffer from film softening stage
-    avg  = pow(GetLuma(avGen::get()), 0.5); // Scene average luma
+    avg  = pow(GetLuma(avGen::get()), 0.75); // Scene average luma
 
 
     // FILM PROFILE ARRAY ///////////////////////
@@ -440,7 +434,7 @@ VOID (FilmDeck, float4 film)
     if ((ENABLE_HAL > 0) && (FILM_NEGATIVE > 0))
     {
         // Apply film halation (blended in linearspace)
-        halate.r = tex2Dbicub(TextureBlur2, SCALE(uv, 4.0));
+        halate.r = tex2Dbicub(TextureSwapchain2, SCALE(uv, 4.0)).a;
         halate.y = (ENABLE_HAL == 1)
                  ? (NegativeProfile[FILM_NEGATIVE - 1].halation.x * 0.02)
                  : (HAL_AMT * 0.02);
@@ -454,33 +448,41 @@ VOID (FilmDeck, float4 film)
     // but since I'm working with non-HDR input data,
     // I mask for luminance to preserve highlights
     // The effect is only applied to the shadows and mids
-    #if (BUFFER_COLOR_BIT_DEPTH > 8)
-        pmask  = GetLuma(SRGBToLinear(tex2D(TextureColor, uv)));
-    #else
-        pmask  = GetLuma(tex2D(TextureColorLinear, uv));
-    #endif
-    if ((PUSH_MODE < 1) && (FILM_NEGATIVE > 0) && (FILM_PRINT > 0))
+    pmask = GetLuma(SRGBToLinear(tex2D(TextureColor, uv)));
+
+    if ((PUSH_MODE < 1) && (FILM_NEGATIVE > 0) && (FILM_PRINT > 0)) // Automatic push
     {
-        film  *= exp2(NEG_EXP);
-        film  *= lerp(1.0, lerp(lerp(NegativeProfile[FILM_NEGATIVE - 1].iso / 800.0, 1.0, avg), 1.0, pmask), AUTO_PUSH * 0.01);
+        film *= exp2(NEG_EXP);
+        film *= lerp(1.0, lerp(lerp(NegativeProfile[FILM_NEGATIVE - 1].iso / 800.0, 1.0, avg), 1.0, pmask), AUTO_PUSH * 0.01);
     }
 
-    else if ((FILM_NEGATIVE > 0) && (FILM_PRINT > 0))
+    else if ((FILM_NEGATIVE > 0) && (FILM_PRINT > 0)) // Manual push
     {
         film *= exp2(NEG_EXP);
         film *= exp2(lerp(-PUSH, 0.0, pmask));
     }
 
-    film     = LinearToSRGB(saturate(film));
+    film = LinearToSRGB(saturate(film));
 
 
     if (FILM_NEGATIVE > 0)
     {
         // WHITE BALANCE ////////////////////////
         /////////////////////////////////////////
+        ntemp = (N_TEMP > 0)
+              ? lerp(6500.0, 40000.0, N_TEMP * 0.01)
+              : lerp(3200.0, 6500.0, 1-abs(N_TEMP * 0.01));
+
+        luma  = GetLuma(film.rgb);
+
         if ((AUTO_TEMP) && (FILM_NEGATIVE > 0))
         {
-            film.rgb = WhiteBalance(film.rgb, N_TEMP, NegativeProfile[FILM_NEGATIVE - 1].temp);
+            film.rgb = lerp(WhiteBalance(film.rgb, ntemp, NegativeProfile[FILM_NEGATIVE - 1].temp), film.rgb, luma);
+        }
+
+        else
+        {
+            film.rgb = lerp(WhiteBalance(film.rgb, ntemp, 6500), film.rgb, luma);
         }
 
 
@@ -504,16 +506,6 @@ VOID (FilmDeck, float4 film)
         #else
             film.rgb = FilmNegative(saturate(film.rgb), 0, FILM_NEGATIVE - 1).rgb;
         #endif
-
-
-        // NEGATIVE TEMPERATURE /////////////////
-        /////////////////////////////////////////
-        film     = SRGBToLinear(film);
-        luma     = GetLuma(film);
-        film    *= ColorTemperatureToRGB(N_TEMP);
-        film    /= GetLuma(film);
-        film    *= luma;
-        film     = LinearToSRGB(film);
     }
 
 
@@ -523,27 +515,26 @@ VOID (FilmDeck, float4 film)
     {
         // SATURATION ///////////////////////////
         /////////////////////////////////////////
-        film.rgb  = RGBToHSL(film.rgb);
-        film.y    = (SATURATION < 100)
-                  ? (lerp(0.0, film.y, SATURATION * 0.01))
-                  : (pow(film.y, lerp(1.0, 0.66, (SATURATION - 100) * 0.01)));
-        film.rgb  = HSLToRGB(film.rgb);
+        film.rgb = RGBToHSL(film.rgb);
+        film.y   = (SATURATION < 100)
+                 ? (lerp(0.0, film.y, SATURATION * 0.01))
+                 : (pow(film.y, lerp(1.0, 0.66, (SATURATION - 100) * 0.01)));
+        film.rgb = HSLToRGB(film.rgb);
 
 
         // LIFT GAMMA GAIN //////////////////////
         /////////////////////////////////////////
-        lift          = (LIFT  - 0.5) * 0.5;
-        gamma         = (GAMMA + 0.5);
-        gain          = (GAIN  + 0.5);
-        film.rgb      = pow(saturate(gain * (film.rgb + lift * (1 - film.rgb))), 1.0 / gamma);
+        lift     = (LIFT  - 0.5) * 0.5;
+        gamma    = (GAMMA + 0.5);
+        gain     = (GAIN  + 0.5);
+        film.rgb = pow(saturate(gain * (film.rgb + lift * (1 - film.rgb))), 1.0 / gamma);
 
 
         // GREY COLORIZE ////////////////////////
         /////////////////////////////////////////
-        hsv      = RGBToHSV(film.rgb);
-        hsv.z    = smoothstep(0.333, 0.0, hsv.y) * (1 - smoothstep(0.333, 0.0, hsv.z) - smoothstep(0.333, 1.0, hsv.z));
-        grey     = (GREYS + 0.5);
-        film.rgb = lerp(film.rgb, film.rgb * grey, hsv.z);
+        hsl      = RGBToHSL(film.rgb);
+        grey     = (GREYS * 2.0);
+        film.rgb = saturate(lerp(film.rgb, film.rgb * grey, saturate(pow(1-hsl.y, 10.0) * pow(smoothstep(0.66, 0.0, hsl.z), 1.0))));
 
 
         // HUE SHIFT ////////////////////////////
@@ -553,7 +544,7 @@ VOID (FilmDeck, float4 film)
 
         // CONTRAST /////////////////////////////
         /////////////////////////////////////////
-        film.rgb      = ContrastCurve(film.rgb, CONTRAST);
+        film.rgb = ContrastCurve(film.rgb, CONTRAST);
     }
 
 
@@ -563,28 +554,29 @@ VOID (FilmDeck, float4 film)
     // but since we're working with non-HDR input data,
     // We'll mask for luminance to preserve highlights
     // The effect is only applied to the shadows and mids
-    film.rgb      = SRGBToLinear(film.rgb);
-    if ((PUSH_MODE < 1) && (FILM_NEGATIVE > 0) && (FILM_PRINT > 0))
+    film.rgb   = SRGBToLinear(film.rgb);
+    if ((PUSH_MODE < 1) && (FILM_NEGATIVE > 0) && (FILM_PRINT > 0)) // Automatic push
     {
-        film  *= exp2(PRT_EXP);
-        film  /= lerp(1.0, lerp(lerp(NegativeProfile[FILM_NEGATIVE - 1].iso / 800.0, 1.0, avg), 1.0, pmask), AUTO_PUSH * 0.01);
+        film *= exp2(PRT_EXP);
+        film /= lerp(1.0, lerp(lerp(NegativeProfile[FILM_NEGATIVE - 1].iso / 800.0, 1.0, avg), 1.0, pmask), AUTO_PUSH * 0.01);
     }
 
-    else if ((FILM_NEGATIVE > 0) && (FILM_PRINT > 0))
+    else if ((FILM_NEGATIVE > 0) && (FILM_PRINT > 0)) // Manual push
     {
-        film  *= exp2(PRT_EXP);
-        film  *= exp2(lerp(PUSH, 0.0, pmask));
+        film *= exp2(PRT_EXP);
+        film *= exp2(lerp(PUSH, 0.0, pmask));
     }
 
 
     if (FILM_PRINT > 0)
     {
-        // PRINT TEMPERATURE ////////////////////////
-        /////////////////////////////////////////////
-        luma     = GetLuma(film);
-        film    *= ColorTemperatureToRGB(P_TEMP);
-        film    /= GetLuma(film);
-        film    *= luma;
+        // WHITE BALANCE ////////////////////////
+        /////////////////////////////////////////
+        ptemp    = (P_TEMP > 0)
+                 ? lerp(6500.0, 40000.0, P_TEMP * 0.01)
+                 : lerp(3200.0, 6500.0, 1-abs(P_TEMP * 0.01));
+        luma     = GetLuma(film.rgb);
+        film.rgb = lerp(WhiteBalance(film.rgb, ptemp, 6500), film.rgb, luma);
 
 
         // FILM GRAIN ///////////////////////////////
@@ -606,7 +598,7 @@ VOID (FilmDeck, float4 film)
                 film.rgb = FilmPrint(saturate(film.rgb), 1, (FILM_PRINT - PRINT_COUNT) - 1).rgb;
             }
         #else
-            film.rgb  = FilmPrint(saturate(film.rgb), 0, FILM_PRINT - 1).rgb;
+            film.rgb = FilmPrint(saturate(film.rgb), 0, FILM_PRINT - 1).rgb;
         #endif
     }
 
@@ -618,36 +610,30 @@ VOID (FilmDeck, float4 film)
 
     // OUTPUT LEVELS ////////////////////////////
     /////////////////////////////////////////////
-    film          = pow(film, 1.0 / OUT_GAMMA);
-    film          = saturate(lerp(LEVELS.x / 255.0, (LEVELS.y + 255) / 255.0, film));
+    film = pow(film, 1.0 / OUT_GAMMA);
+    film = saturate(lerp(LEVELS.x / 255.0, (LEVELS.y + 255) / 255.0, film));
 
+
+    // CALIBRATION GUIDES ///////////////////////
+    /////////////////////////////////////////////
     if (CLIP_CAL)
     {
-        film.rgb      = lerp(film.rgb, float3(1, 0, 0), (GetLuma(film.rgb) > (254.0 / 255.0)));
-        film.rgb      = lerp(film.rgb, float3(0, 0, 1), (GetLuma(film.rgb) == 0.0));
+        film.rgb = lerp(film.rgb, float3(1, 0, 0), (GetLuma(film.rgb) > (254.0 / 255.0)));
+        film.rgb = lerp(film.rgb, float3(0, 0, 1), (GetLuma(film.rgb) == 0.0));
     }
 
-    hsv           = RGBToHSV(film.rgb);
+    hsl = RGBToHSV(film.rgb);
 
     if (GREY_CAL)
     {
-        hsv.z         = SRGBToLinear(hsv.zzz).x;
-        film.rgb      = lerp(film.rgb, float3(0, 1, 0), smoothstep(0.15, 0.05, hsv.y) * (1 - smoothstep(0.055, 0.0, hsv.z) - smoothstep(0.305, 1.0, hsv.z)));
+        hsl.z    = SRGBToLinear(hsl.zzz).x;
+        film.rgb = lerp(film.rgb, float3(0, 1, 0), smoothstep(0.15, 0.05, hsl.y) * (1 - smoothstep(0.055, 0.0, hsl.z) - smoothstep(0.305, 1.0, hsl.z)));
     }
 
 
     // FINAL DITHER /////////////////////////////
     /////////////////////////////////////////////
-    film.rgb     += TriDither(film.rgb, uv, FORCE_8_BIT_OUTPUT ? 8 : BUFFER_COLOR_BIT_DEPTH);
-
-
-    #if (ENABLE_WATERMARK != 0)
-    // WATERMARK ////////////////////////////////
-    float2 watermark;
-
-    watermark     = tex2D(TextureWatermark, uv).xy;
-    film          = lerp(film, watermark.x, watermark.y);
-    #endif
+    film.rgb += TriDither(film.rgb, uv, FORCE_8_BIT_OUTPUT ? 8 : BUFFER_COLOR_BIT_DEPTH);
 }
 
 VOID (GateWeave, float4 color)
@@ -658,7 +644,7 @@ VOID (GateWeave, float4 color)
             ? ((cos(Timer * (1.0 / 24.0)) * 0.0001) * (WEAVE_AMT * 0.015))
             : 0.0;
 
-    color = tex2D(TextureColor, uv + float2(animate, 0.0));
+    color   = tex2D(TextureColor, uv + float2(animate, 0.0));
 
     if (ENABLE_FLK)
     {
@@ -666,9 +652,7 @@ VOID (GateWeave, float4 color)
     }
 
     #if (LET_ME_COOK != 0)
-        float3 cook;
-        cook  = tex2D(TextureCook, uv).rgb;
-        color = BlendScreen(color.rgb, cook);
+        color.rgb = BlendScreen(color.rgb, tex2D(TextureCook, uv).rgb);
     #endif
 }
 
@@ -702,14 +686,14 @@ technique FILMDECK < ui_label = "FILMDECK"; ui_tooltip = "Film Emulation"; >
     {
         VertexShader = VS_Tri;
         PixelShader  = PS_Halate1;
-        RenderTarget = RT_Blur1;
+        RenderTarget = RT_Swapchain1;
     }
 
     pass // HALATION ////////////////////////////
     {
         VertexShader = VS_Tri;
         PixelShader  = PS_Halate2;
-        RenderTarget = RT_Blur2;
+        RenderTarget = RT_Swapchain2;
     }
 
     pass // FILM PASS ///////////////////////////

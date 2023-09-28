@@ -25,32 +25,20 @@
 **  ///////////////////////////////////////////////////////////////////////////////////////////  */
 
 // Bit depth modes for the internal render targets
-// 0 = Use game's internal bit depth (not recommended for SDR)
-// 1 = RGB10A2 - 10-bit RGB, 2-bit Alpha
+// 1 = Use game's internal bit depth (not recommended for SDR)
 // 2 = RGBA16  - 16-bit RGBA (default mode)
 // 3 = RGBA16F - 16-bit RGBA Float
 #ifndef SWAPCHAIN_PRECISION
     #define SWAPCHAIN_PRECISION 2
 #endif
-#if   (SWAPCHAIN_PRECISION == 0)
+#if   (SWAPCHAIN_PRECISION == 1)
     #define INTERNAL_DEPTH     BUFFER_FORMAT
-    #if (BUFFER_COLOR_BIT_DEPTH > 8)
-        #define INTERNAL_DEPTH_1CH R16
-    #else
-        #define INTERNAL_DEPTH_1CH R8
-    #endif
-#elif (SWAPCHAIN_PRECISION == 1)
-    #define INTERNAL_DEPTH     RGB10A2
-    #define INTERNAL_DEPTH_1CH R16
 #elif (SWAPCHAIN_PRECISION == 2)
     #define INTERNAL_DEPTH     RGBA16
-    #define INTERNAL_DEPTH_1CH R16
 #elif (SWAPCHAIN_PRECISION == 3)
     #define INTERNAL_DEPTH     RGBA16F
-    #define INTERNAL_DEPTH_1CH R16F
 #else
-    #define INTERNAL_DEPTH     RGB10A2
-    #define INTERNAL_DEPTH_1CH R16
+    #define INTERNAL_DEPTH     RGBA16
 #endif
 
 // If a user only has an 8-bit monitor, but the game uses RGB10A2
@@ -61,10 +49,14 @@
 #endif
 
 // A meme and easter egg
-#define LET_ME_COOK 0
+TEXTURE_SRC (TexCook, "SHADERDECK/LETMECOOK/ross.png")
+SAMPLER     (TextureCook, TexCook)
+#ifndef LET_ME_COOK
+    #define LET_ME_COOK 0
+#endif
 
 #include "SHADERDECK/FILMDECK/Custom.fxh"
-#define PATREON_NAG \
+#define __PATREON_NAG \
     " For the full set of film profiles: https://patreon.com/TreyM"
 
 // TEXTURES & SAMPLERS ////////////////////////////////////////////////////////////////////////////
@@ -226,7 +218,6 @@ FilmStruct K2302()
     "KODAK VISION Color Print Film 2383\0" \
     "Fujicolor Positive Film Eterna-CP 3521XD\0" \
     "KODAK B&W 2302\0"
-
 
 // GENERIC PROFILES ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////

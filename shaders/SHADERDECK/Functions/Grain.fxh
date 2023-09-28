@@ -24,7 +24,7 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
 
     scale      = float2(BUFFER_WIDTH, BUFFER_HEIGHT) / 1024.0;
 
-    profile = 0;
+    profile = index;
 
     switch(index)
     {
@@ -53,66 +53,66 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
     // Film grain saturation for shadows, midtones, and highlights
     float3 satcurve[3] =
     {
-        // Full Frame 35mm
-        float3(1.0, 1.0, 1.0),
+        // Super 16mm
+        float3(0.55, 0.45, 0.25),
 
         // Super 35mm
         float3(0.33, 0.33, 0.25),
 
-        // Super 16mm
-        float3(0.55, 0.45, 0.25)
+        // Full Frame 35mm
+        float3(0.4, 0.33, 0.25)
     };
 
     // Grain amount in shadows, midtones, and highlights
     float3 lumacurve[3] =
     {
-        // Full Frame 35mm
-        float3(1.0, 1.0, 1.0),
+        // Super 16mm
+        float3(1.0, 0.5, 0.75),
 
         // Super 35mm
         float3(0.25, 0.75, 0.25),
 
-        // Super 16mm
-        float3(1.0, 0.5, 0.75)
+        // Full Frame 35mm
+        float3(0.66, 0.4, 0.5)
     };
 
     // Per-channel grain in shadows
     float3 rgbshadows[3] =
     {
-        // Full Frame 35mm
-        float3(1.0, 1.0, 1.0),
+        // Super 16mm
+        float3(1.0, 0.33, 0.75),
 
         // Super 35mm
         float3(0.33, 1.0, 0.5),
 
-        // Super 16mm
-        float3(1.0, 0.33, 0.75)
+        // Full Frame 35mm
+        float3(0.66, 0.15, 1.0)
     };
 
     // Per-channel grain in midtones
     float3 rgbmids[3] =
     {
-        // Full Frame 35mm
-        float3(1.0, 1.0, 1.0),
+        // Super 16mm
+        float3(0.25, 1.0, 0.33),
 
         // Super 35mm
         float3(0.66, 0.25, 0.5),
 
-        // Super 16mm
-        float3(0.25, 1.0, 0.33)
+        // Full Frame 35mm
+        float3(1.0, 1.0, 1.0)
     };
 
     // Per-channel grain in highlights
     float3 rgbhighs[3] =
     {
-        // Full Frame 35mm
-        float3(1.0, 1.0, 1.0),
+        // Super 16mm
+        float3(1.0, 0.33, 0.5),
 
         // Super 35mm
         float3(1.0, 0.15, 1.0),
 
-        // Super 16mm
-        float3(1.0, 0.33, 0.5)
+        // Full Frame 35mm
+        float3(1.0, 1.0, 1.0)
     };
 
     // Setup the luma ranges
@@ -122,9 +122,26 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
     range.y     = saturate(1 - range.x - range.z);
 
     // Setup the RGB balance for shadows, midtones, and highlights
-    shadows     = lerp(0.5, grain, rgbshadows[profile]);
-    midtones    = lerp(0.5, grain, rgbmids[profile]);
-    highlights  = lerp(0.5, grain, rgbhighs[profile]);
+    // Use B&W grain if a B&W negative is selected
+    #ifdef __BW_CHECK
+        if (__BW_CHECK)
+        {
+            shadows     = lerp(0.5, grain, rgbshadows[profile]);
+            midtones    = lerp(0.5, grain, rgbmids[profile]);
+            highlights  = lerp(0.5, grain, rgbhighs[profile]);
+        }
+
+        else
+        {
+            shadows     = grain.x;
+            midtones    = grain.x;
+            highlights  = grain.x;
+        }
+    #else
+        shadows     = lerp(0.5, grain, rgbshadows[profile]);
+        midtones    = lerp(0.5, grain, rgbmids[profile]);
+        highlights  = lerp(0.5, grain, rgbhighs[profile]);
+    #endif
 
     // Setup grain for shadows, midtones, and highlights
     shadows     = lerp(0.5, shadows,    lumacurve[profile].x);
@@ -132,15 +149,24 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
     highlights  = lerp(0.5, highlights, lumacurve[profile].z);
 
     // Apply the saturation curve to the grain
-    shadows     = lerp(GetLuma(shadows),    shadows,    satcurve[profile].x);
-    midtones    = lerp(GetLuma(midtones),   midtones,   satcurve[profile].y);
-    highlights  = lerp(GetLuma(highlights), highlights, satcurve[profile].z);
-
+    #ifdef __BW_CHECK
+        if (__BW_CHECK)
+        {
+            shadows     = lerp(GetLuma(shadows),    shadows,    satcurve[profile].x);
+            midtones    = lerp(GetLuma(midtones),   midtones,   satcurve[profile].y);
+            highlights  = lerp(GetLuma(highlights), highlights, satcurve[profile].z);
+        }
+    #else
+        shadows     = lerp(GetLuma(shadows),    shadows,    satcurve[profile].x);
+        midtones    = lerp(GetLuma(midtones),   midtones,   satcurve[profile].y);
+        highlights  = lerp(GetLuma(highlights), highlights, satcurve[profile].z);
+    #endif
+    
     // Apply the luma curve to the grain
-    // grain       = 0.0;
-    // grain      += lerp(0.0, shadows,    range.x);
-    // grain      += lerp(0.0, midtones,   range.y);
-    // grain      += lerp(0.0, highlights, range.z);
+    grain       = 0.0;
+    grain      += lerp(0.0, shadows,    range.x);
+    grain      += lerp(0.0, midtones,   range.y);
+    grain      += lerp(0.0, highlights, range.z);
 
     // Overlay the grain
     color  = BlendHardLight(color, lerp(0.5, grain, intensity * 0.01));

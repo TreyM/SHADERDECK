@@ -141,7 +141,7 @@ float Blur18H (float luma, sampler Samplerluma, float4 bounds, float width, floa
     return luma;
 }
 
-float Blur18V (float luma, sampler Samplerluma, float4 bounds, float4 width, float2 coord)
+float Blur18V (float luma, sampler Samplerluma, float4 bounds, float width, float2 coord)
 {
     float offset[18] =
     {
@@ -496,7 +496,6 @@ float3 Blur6V (float3 color, sampler SamplerColor, float4 bounds, float2 coord)
 // HALATION /////////////////////////////////////
 float HalateH (float luma, sampler Samplerluma, float width, float4 bounds, float2 coord)
 {
-    // This kernel is supposedly an approximation of lambertian distribution
 	float kernel[7] =
     {
         0.1736,
@@ -532,7 +531,6 @@ float HalateH (float luma, sampler Samplerluma, float width, float4 bounds, floa
 
 float HalateV (float luma, sampler Samplerluma, float width, float4 bounds, float2 coord)
 {
-    // This kernel is supposedly an approximation of lambertian distribution
 	float kernel[7] =
     {
         0.1736,
@@ -559,8 +557,8 @@ float HalateV (float luma, sampler Samplerluma, float width, float4 bounds, floa
         if (((coord.x + i * BUFFER_PIXEL_SIZE.x) > bounds.y  ||
              (coord.x - i * BUFFER_PIXEL_SIZE.x) < bounds.x)) continue;
 
-        luma += tex2Dlod(Samplerluma, float4(coord + float2(0.0, i * BUFFER_PIXEL_SIZE.y) * width, 0.0, 0.0)) * kernel[i];
-        luma += tex2Dlod(Samplerluma, float4(coord - float2(0.0, i * BUFFER_PIXEL_SIZE.y) * width, 0.0, 0.0)) * kernel[i];
+        luma += tex2Dlod(Samplerluma, float4(coord + float2(0.0, i * BUFFER_PIXEL_SIZE.y) * width, 0.0, 0.0)).a * kernel[i];
+        luma += tex2Dlod(Samplerluma, float4(coord - float2(0.0, i * BUFFER_PIXEL_SIZE.y) * width, 0.0, 0.0)).a * kernel[i];
     }
 
     return luma;

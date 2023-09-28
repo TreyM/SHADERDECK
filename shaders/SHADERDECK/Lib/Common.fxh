@@ -318,8 +318,8 @@ float3 WhiteBalance(float3 color, float scene, float cam)
 
     // Apply the whitebalance
     color *= ColorTemperatureToRGB(kelvin); // Apply color temp
-    // color /= GetLuma(color); // Luma preservation
-	// color *= luma; // Luma preservation
+    color /= GetLuma(color); // Luma preservation
+	color *= luma; // Luma preservation
 
     return color;
 }
@@ -474,9 +474,7 @@ float4 tex2Dbicub2(sampler texSampler, float2 coord, float2 inscale)
 texture BACKBUFFER               : COLOR;
 texture DEPTHBUFFER              : DEPTH;
 sampler TextureColor             { Texture = BACKBUFFER; AddressU = BORDER; AddressV = BORDER; AddressW = BORDER; };
-sampler TextureColorLinear       { Texture = BACKBUFFER; AddressU = BORDER; AddressV = BORDER; AddressW = BORDER; SRGBTexture = true; };
 sampler TextureColorMirror       { Texture = BACKBUFFER; AddressU = MIRROR; AddressV = MIRROR; AddressW = MIRROR; };
-sampler TextureColorLinearMirror { Texture = BACKBUFFER; AddressU = MIRROR; AddressV = MIRROR; AddressW = MIRROR; SRGBTexture = true; };
 
 
 // VERTEX SHADER //////////////////////////////////////////////////////////////////////////////////
