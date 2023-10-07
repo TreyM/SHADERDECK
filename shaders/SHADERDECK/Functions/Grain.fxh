@@ -10,21 +10,17 @@ uniform int blue_y  < source = "random"; min = 0; max = 100; >;
 TEXTURE_FULL_SRC (TexGrain, "SHADERDECK/Grain/Grain.png",   1024, 1024, RGBA8)
 SAMPLER_UV       (TextureGrain,  TexGrain,  WRAP)
 
-float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
+float3 GetGrainTexture(int index, float inv, float2 coord)
 {
-    float3 range, grain, hsl, shadows, midtones, highlights;
+    float3 grain;
     float2 rpos, gpos, bpos, scale;
-    float  luma;
-    int    profile;
 
     // Randomize the texture position for the RGB channels (random value between 0.0 - 1.0)
-    rpos       = float2(red_x,   red_y)   * 0.01;
-    gpos       = float2(green_x, green_y) * 0.01;
-    bpos       = float2(blue_x,  blue_y)  * 0.01;
+    rpos       = float2(red_x,   red_y)   * 0.01 * inv;
+    gpos       = float2(green_x, green_y) * 0.01 * inv;
+    bpos       = float2(blue_x,  blue_y)  * 0.01 * inv;
 
     scale      = float2(BUFFER_WIDTH, BUFFER_HEIGHT) / 1024.0;
-
-    profile = index;
 
     switch(index)
     {
@@ -50,6 +46,20 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
             break;
     }
 
+    return grain;
+}
+
+float3 FilmGrain(float3 color, int index, float mult, int intensity, float2 coord)
+{
+    float3 range, grain, hsl, shadows, midtones, highlights;
+    float2 rpos, gpos, bpos, scale;
+    float  luma;
+    int    profile;
+
+    profile = index;
+
+    grain = GetGrainTexture(index, mult, coord);
+
     // Film grain saturation for shadows, midtones, and highlights
     float3 satcurve[3] =
     {
@@ -57,10 +67,10 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
         float3(0.55, 0.45, 0.25),
 
         // Super 35mm
-        float3(0.33, 0.33, 0.25),
+        float3(0.5, 0.5, 0.4),
 
         // Full Frame 35mm
-        float3(0.4, 0.33, 0.25)
+        float3(0.5, 0.4, 0.3)
     };
 
     // Grain amount in shadows, midtones, and highlights
@@ -70,10 +80,10 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
         float3(1.0, 0.5, 0.75),
 
         // Super 35mm
-        float3(0.25, 0.75, 0.25),
+        float3(0.25, 0.75, 1.0),
 
         // Full Frame 35mm
-        float3(0.66, 0.4, 0.5)
+        float3(0.66, 0.33, 1.0)
     };
 
     // Per-channel grain in shadows
@@ -117,8 +127,8 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
 
     // Setup the luma ranges
     luma        = GetLuma(pow(abs(color), 0.75));
-    range.x     = smoothstep(0.25, 0.0, luma);
-    range.z     = smoothstep(0.25, 1.0, luma);
+    range.x     = smoothstep(0.333, 0.0, luma);
+    range.z     = smoothstep(0.333, 1.0, luma);
     range.y     = saturate(1 - range.x - range.z);
 
     // Setup the RGB balance for shadows, midtones, and highlights
@@ -168,8 +178,8 @@ float3 FilmGrain(float3 color, int index, int intensity, float2 coord)
     grain      += lerp(0.0, midtones,   range.y);
     grain      += lerp(0.0, highlights, range.z);
 
-    // Overlay the grain
-    color  = BlendHardLight(color, lerp(0.5, grain, intensity * 0.01));
+    // Blend the grain
+    color += (((grain - 0.5) * 2) * (intensity * 0.0125));
 
-    return color;
+    return saturate(color);
 }

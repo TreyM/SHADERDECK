@@ -26,7 +26,7 @@
 
 
 // This must be set to 1 for your custom preset to work!
-#define CUSTOM_PRESET_ENABLED           0
+#define CUSTOM_PRESET_ENABLED 0
 
 
 /*  ///////////////////////////////////////////////////////////////////////////////////////////  **
@@ -90,11 +90,11 @@
 //     1 = 35mm fine grain
 //     2 = Super35 medium grain
 //     3 = 16mm large grain
-#define CUST_NEGATIVE_PROFILE_1      1
+#define CUST_NEGATIVE_PROFILE_1      2
 #define CUST_NEGATIVE_PROFILE_2      2
-#define CUST_NEGATIVE_PROFILE_3      3
-#define CUST_NEGATIVE_PROFILE_4      1
-#define CUST_NEGATIVE_PROFILE_5      2
+#define CUST_NEGATIVE_PROFILE_3      2
+#define CUST_NEGATIVE_PROFILE_4      2
+#define CUST_NEGATIVE_PROFILE_5      1
 
 
 // CUSTOM PRINT ///////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@
 //     1 = 35mm fine grain
 //     2 = Super35 medium grain
 #define CUST_PRINT_PROFILE_1         1
-#define CUST_PRINT_PROFILE_2         2
+#define CUST_PRINT_PROFILE_2         1
 #define CUST_PRINT_PROFILE_3         1
-#define CUST_PRINT_PROFILE_4         2
+#define CUST_PRINT_PROFILE_4         1
 #define CUST_PRINT_PROFILE_5         1

@@ -24,120 +24,108 @@
 **  ///////////////////////////////////////////////////////////////////////////////////////////  **
 **  ///////////////////////////////////////////////////////////////////////////////////////////  */
 
+
 // STRUCT ARRAYS //////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-#if !CUSTOM_PRESET_ENABLED
-    FilmStruct NegativeProfile[NEGATIVE_COUNT];
-        NegativeProfile[0] = K5207D();
-        NegativeProfile[1] = K5213T();
+#ifdef __NEG_ARRAY_LIST
+    #undef __NEG_ARRAY_LIST
+#endif
+#define __NEG_ARRAY_LIST \
+        NegativeProfile[0] = K5207D(); \
+        NegativeProfile[1] = K5213T(); \
         NegativeProfile[2] = FR500D();
 
-    FilmStruct PrintProfile[PRINT_COUNT];
-        PrintProfile[0] = K2383();
-        PrintProfile[1] = F3521();
+#ifdef __PRI_ARRAY_LIST
+    #undef __PRI_ARRAY_LIST
+#endif
+#define __PRI_ARRAY_LIST \
+        PrintProfile[0] = K2383(); \
+        PrintProfile[1] = F3521(); \
         PrintProfile[2] = K2302();
+
+#if !CUSTOM_PRESET_ENABLED
+    FilmStruct NegativeProfile[NEGATIVE_COUNT];
+        __NEG_ARRAY_LIST
+
+    FilmStruct PrintProfile[PRINT_COUNT];
+        __PRI_ARRAY_LIST
 
 #else
     FilmStruct NegativeProfile[NEGATIVE_COUNT + CUST_NEGATIVE_LUT_COUNT];
-    FilmStruct PrintProfile[PRINT_COUNT + CUST_PRINT_LUT_COUNT];
+    FilmStruct PrintProfile[PRINT_COUNT       + CUST_PRINT_LUT_COUNT];
     FilmStruct GenericProfile[3];
         GenericProfile[0] = Generic35mm();
         GenericProfile[1] = GenericSuper35();
         GenericProfile[2] = Generic16mm();
 
     #if   (CUST_NEGATIVE_LUT_COUNT == 1)
-            NegativeProfile[0] = K5207D();
-            NegativeProfile[1] = K5213T();
-            NegativeProfile[2] = FR500D();
-            NegativeProfile[3] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
-
-            PrintProfile[0] = K2383();
-            PrintProfile[1] = F3521();
-            PrintProfile[2] = K2302();
-            PrintProfile[3] = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
+            __NEG_ARRAY_LIST
+            NegativeProfile[NEGATIVE_COUNT]    = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
 
     #elif (CUST_NEGATIVE_LUT_COUNT == 2)
-            NegativeProfile[0] = K5207D();
-            NegativeProfile[1] = K5213T();
-            NegativeProfile[2] = FR500D();
-            NegativeProfile[3] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
-            NegativeProfile[4] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
-            
-            PrintProfile[0] = K2383();
-            PrintProfile[1] = F3521();
-            PrintProfile[2] = K2302();
-            PrintProfile[3] = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
-            PrintProfile[4] = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
+            __NEG_ARRAY_LIST
+            NegativeProfile[NEGATIVE_COUNT    ] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 1] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
 
     #elif (CUST_NEGATIVE_LUT_COUNT == 3)
-            NegativeProfile[0] = K5207D();
-            NegativeProfile[1] = K5213T();
-            NegativeProfile[2] = FR500D();
-            NegativeProfile[3] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
-            NegativeProfile[4] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
-            NegativeProfile[5] = GenericProfile[CUST_NEGATIVE_PROFILE_3 - 1];
-
-            PrintProfile[0] = K2383();
-            PrintProfile[1] = F3521();
-            PrintProfile[2] = K2302();
-            PrintProfile[3] = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
-            PrintProfile[4] = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
-            PrintProfile[5] = GenericProfile[CUST_PRINT_PROFILE_3 - 1];
+            __NEG_ARRAY_LIST
+            NegativeProfile[NEGATIVE_COUNT    ] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 1] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 2] = GenericProfile[CUST_NEGATIVE_PROFILE_3 - 1];
 
     #elif (CUST_NEGATIVE_LUT_COUNT == 4)
-            NegativeProfile[0] = K5207D();
-            NegativeProfile[1] = K5213T();
-            NegativeProfile[2] = FR500D();
-            NegativeProfile[3] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
-            NegativeProfile[4] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
-            NegativeProfile[5] = GenericProfile[CUST_NEGATIVE_PROFILE_3 - 1];
-            NegativeProfile[6] = GenericProfile[CUST_NEGATIVE_PROFILE_4 - 1];
-
-            PrintProfile[0] = K2383();
-            PrintProfile[1] = F3521();
-            PrintProfile[2] = K2302();
-            PrintProfile[3] = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
-            PrintProfile[4] = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
-            PrintProfile[5] = GenericProfile[CUST_PRINT_PROFILE_3 - 1];
-            PrintProfile[6] = GenericProfile[CUST_PRINT_PROFILE_4 - 1];
+            __NEG_ARRAY_LIST
+            NegativeProfile[NEGATIVE_COUNT    ] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 1] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 2] = GenericProfile[CUST_NEGATIVE_PROFILE_3 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 3] = GenericProfile[CUST_NEGATIVE_PROFILE_4 - 1];
 
     #elif (CUST_NEGATIVE_LUT_COUNT == 5)
-            NegativeProfile[0] = K5207D();
-            NegativeProfile[1] = K5213T();
-            NegativeProfile[2] = FR500D();
-            NegativeProfile[3] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
-            NegativeProfile[4] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
-            NegativeProfile[5] = GenericProfile[CUST_NEGATIVE_PROFILE_3 - 1];
-            NegativeProfile[6] = GenericProfile[CUST_NEGATIVE_PROFILE_4 - 1];
-            NegativeProfile[7] = GenericProfile[CUST_NEGATIVE_PROFILE_5 - 1];
-
-            PrintProfile[0] = K2383();
-            PrintProfile[1] = F3521();
-            PrintProfile[2] = K2302();
-            PrintProfile[3] = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
-            PrintProfile[4] = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
-            PrintProfile[5] = GenericProfile[CUST_PRINT_PROFILE_3 - 1];
-            PrintProfile[6] = GenericProfile[CUST_PRINT_PROFILE_4 - 1];
-            PrintProfile[7] = GenericProfile[CUST_PRINT_PROFILE_5 - 1];
+            __NEG_ARRAY_LIST
+            NegativeProfile[NEGATIVE_COUNT    ] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 1] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 2] = GenericProfile[CUST_NEGATIVE_PROFILE_3 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 3] = GenericProfile[CUST_NEGATIVE_PROFILE_4 - 1];
+            NegativeProfile[NEGATIVE_COUNT + 4] = GenericProfile[CUST_NEGATIVE_PROFILE_5 - 1];
 
     #else
-            NegativeProfile[0] = K5207D();
-            NegativeProfile[1] = K5213T();
-            NegativeProfile[2] = FR500D();
-            NegativeProfile[3] = GenericProfile[CUST_NEGATIVE_PROFILE_1 - 1];
-            NegativeProfile[4] = GenericProfile[CUST_NEGATIVE_PROFILE_2 - 1];
-            NegativeProfile[5] = GenericProfile[CUST_NEGATIVE_PROFILE_3 - 1];
-            NegativeProfile[6] = GenericProfile[CUST_NEGATIVE_PROFILE_4 - 1];
-            NegativeProfile[7] = GenericProfile[CUST_NEGATIVE_PROFILE_5 - 1];
-
-            PrintProfile[0] = K2383();
-            PrintProfile[1] = F3521();
-            PrintProfile[2] = K2302();
-            PrintProfile[3] = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
-            PrintProfile[4] = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
-            PrintProfile[5] = GenericProfile[CUST_PRINT_PROFILE_3 - 1];
-            PrintProfile[6] = GenericProfile[CUST_PRINT_PROFILE_4 - 1];
-            PrintProfile[7] = GenericProfile[CUST_PRINT_PROFILE_5 - 1];
+            __NEG_ARRAY_LIST
 
     #endif
+
+    #if   (CUST_PRINT_LUT_COUNT == 1)
+            __PRI_ARRAY_LIST
+            PrintProfile[PRINT_COUNT]          = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
+
+    #elif (CUST_PRINT_LUT_COUNT == 2)
+            __PRI_ARRAY_LIST
+            PrintProfile[PRINT_COUNT    ]       = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
+            PrintProfile[PRINT_COUNT + 1]       = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
+
+    #elif (CUST_PRINT_LUT_COUNT == 3)
+            __PRI_ARRAY_LIST
+            PrintProfile[PRINT_COUNT    ]       = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
+            PrintProfile[PRINT_COUNT + 1]       = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
+            PrintProfile[PRINT_COUNT + 2]       = GenericProfile[CUST_PRINT_PROFILE_3 - 1];
+
+    #elif (CUST_PRINT_LUT_COUNT == 4)
+            __PRI_ARRAY_LIST
+            PrintProfile[PRINT_COUNT    ]       = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
+            PrintProfile[PRINT_COUNT + 1]       = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
+            PrintProfile[PRINT_COUNT + 2]       = GenericProfile[CUST_PRINT_PROFILE_3 - 1];
+            PrintProfile[PRINT_COUNT + 3]       = GenericProfile[CUST_PRINT_PROFILE_4 - 1];
+
+    #elif (CUST_PRINT_LUT_COUNT == 5)
+            __PRI_ARRAY_LIST
+            PrintProfile[PRINT_COUNT    ]       = GenericProfile[CUST_PRINT_PROFILE_1 - 1];
+            PrintProfile[PRINT_COUNT + 1]       = GenericProfile[CUST_PRINT_PROFILE_2 - 1];
+            PrintProfile[PRINT_COUNT + 2]       = GenericProfile[CUST_PRINT_PROFILE_3 - 1];
+            PrintProfile[PRINT_COUNT + 3]       = GenericProfile[CUST_PRINT_PROFILE_4 - 1];
+            PrintProfile[PRINT_COUNT + 4]       = GenericProfile[CUST_PRINT_PROFILE_5 - 1];
+
+    #else
+            __PRI_ARRAY_LIST
+
+    #endif
+    
 #endif

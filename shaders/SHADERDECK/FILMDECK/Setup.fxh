@@ -41,6 +41,14 @@
     #define INTERNAL_DEPTH     RGBA16
 #endif
 
+#ifndef ENABLE_HALATION
+    #define ENABLE_HALATION 1
+#endif
+
+#ifndef ENABLE_GRAIN_DISPLACEMENT
+    #define ENABLE_GRAIN_DISPLACEMENT 1
+#endif
+
 // If a user only has an 8-bit monitor, but the game uses RGB10A2
 // It is possible to force the final dithering to be 8-bit to avoid
 // banding on the user's 8-bit panel
@@ -81,6 +89,7 @@ sampler PrintAtlas
     MipFilter = LINEAR;
 };
 
+#if ((CUST_NEGATIVE_LUT_COUNT > 0) && (CUST_NEGATIVE_LUT_COUNT < 6))
 texture CustomNegativeStocks < source = "SHADERDECK/LUTs/" CUST_NEGATIVE_FILENAME; >
 {
     Width     = CUST_NEGATIVE_TEXTURE_WIDTH;
@@ -93,7 +102,9 @@ sampler CustomNegativeAtlas
     MinFilter = LINEAR;
     MipFilter = LINEAR;
 };
+#endif
 
+#if ((CUST_PRINT_LUT_COUNT > 0) && (CUST_PRINT_LUT_COUNT < 6))
 texture CustomPrintStocks < source = "SHADERDECK/LUTs/"CUST_PRINT_FILENAME; >
 {
     Width     = CUST_PRINT_TEXTURE_WIDTH;
@@ -106,6 +117,7 @@ sampler CustomPrintAtlas
     MinFilter = LINEAR;
     MipFilter = LINEAR;
 };
+#endif
 
 
 // FILM PROFILE STRUCT ////////////////////////////////////////////////////////////////////////////
@@ -373,12 +385,8 @@ FilmStruct Generic16mm()
 
 #else
     #define CUSTOM_NEGATIVE_LIST(x) \
-        NEGATIVE_LIST \
-        "["##x##"] "##CUST_NEGATIVE_NAME_1##"\0" \
-        "["##x##"] "##CUST_NEGATIVE_NAME_2##"\0" \
-        "["##x##"] "##CUST_NEGATIVE_NAME_3##"\0" \
-        "["##x##"] "##CUST_NEGATIVE_NAME_4##"\0" \
-        "["##x##"] "##CUST_NEGATIVE_NAME_5##"\0"
+        NEGATIVE_LIST 
+
 #endif
 
 #if   (CUST_PRINT_LUT_COUNT == 1)
@@ -386,20 +394,20 @@ FilmStruct Generic16mm()
         PRINT_LIST \
         "["##x##"] "##CUST_PRINT_NAME_1##"\0"
 
-#elif (CUST_NEGATIVE_LUT_COUNT == 2)
+#elif (CUST_PRINT_LUT_COUNT == 2)
     #define CUSTOM_PRINT_LIST(x) \
         PRINT_LIST \
         "["##x##"] "##CUST_PRINT_NAME_1##"\0" \
         "["##x##"] "##CUST_PRINT_NAME_2##"\0"
 
-#elif (CUST_NEGATIVE_LUT_COUNT == 3)
+#elif (CUST_PRINT_LUT_COUNT == 3)
     #define CUSTOM_PRINT_LIST(x) \
         PRINT_LIST \
         "["##x##"] "##CUST_PRINT_NAME_1##"\0" \
         "["##x##"] "##CUST_PRINT_NAME_2##"\0" \
         "["##x##"] "##CUST_PRINT_NAME_3##"\0"
 
-#elif (CUST_NEGATIVE_LUT_COUNT == 4)
+#elif (CUST_PRINT_LUT_COUNT == 4)
     #define CUSTOM_PRINT_LIST(x) \
         PRINT_LIST \
         "["##x##"] "##CUST_PRINT_NAME_1##"\0" \
@@ -407,7 +415,7 @@ FilmStruct Generic16mm()
         "["##x##"] "##CUST_PRINT_NAME_3##"\0" \
         "["##x##"] "##CUST_PRINT_NAME_4##"\0"
 
-#elif (CUST_NEGATIVE_LUT_COUNT == 5)
+#elif (CUST_PRINT_LUT_COUNT == 5)
     #define CUSTOM_PRINT_LIST(x) \
         PRINT_LIST \
         "["##x##"] "##CUST_PRINT_NAME_1##"\0" \
@@ -418,12 +426,8 @@ FilmStruct Generic16mm()
 
 #else
     #define CUSTOM_PRINT_LIST(x) \
-        PRINT_LIST \
-        "["##x##"]"" "##CUST_PRINT_NAME_1##"\0" \
-        "["##x##"]"" "##CUST_PRINT_NAME_2##"\0" \
-        "["##x##"]"" "##CUST_PRINT_NAME_3##"\0" \
-        "["##x##"]"" "##CUST_PRINT_NAME_4##"\0" \
-        "["##x##"]"" "##CUST_PRINT_NAME_5##"\0"
+        PRINT_LIST
+
 #endif
 
 #define CUSTOM_LIST_N CUSTOM_NEGATIVE_LIST (CUST_PRESET_NAME)

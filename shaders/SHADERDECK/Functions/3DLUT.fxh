@@ -83,7 +83,11 @@ float3 FilmNegative(float3 color, int tex, int stock)
     switch(tex)
     {
         case  0: return saturate(ApplyTLUT(NegativeAtlas, color, stock));
+
+        #if ((CUST_NEGATIVE_LUT_COUNT > 0) && (CUST_NEGATIVE_LUT_COUNT < 6))
         case  1: return saturate(ApplyTLUT(CustomNegativeAtlas, color, stock));
+        #endif
+        
         default: return color;
     }
 }
@@ -93,7 +97,11 @@ float3 FilmPrint(float3 color, int tex, int stock)
     switch(tex)
     {
         case  0: return saturate(ApplyTLUT(PrintAtlas, color, stock));
+
+        #if ((CUST_PRINT_LUT_COUNT > 0) && (CUST_PRINT_LUT_COUNT < 6))
         case  1: return saturate(ApplyTLUT(CustomPrintAtlas, color, stock));
+        #endif
+
         default: return color;
     }
 }

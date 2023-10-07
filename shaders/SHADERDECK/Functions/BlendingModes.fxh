@@ -41,14 +41,15 @@ float3 BlendSoftLight(float3 base, float3 blend)
 // HARD LIGHT FLOAT //////////////////////////////
 float BlendHardLight(float base, float blend)
 {
-    return BlendOverlay(blend, base);
+    return (blend <= 0.5) ? 2*base*blend : 1 - 2*(1-base)*(1-blend);
 }
 // HARD LIGHT FLOAT3 /////////////////////////////
 float3 BlendHardLight(float3 base, float3 blend)
 {
-    return BlendOverlay(blend, base);
+	return float3(BlendHardLight(base.r, blend.r), 
+			      BlendHardLight(base.g, blend.g), 
+			      BlendHardLight(base.b, blend.b));
 }
-
 
 
 // ADD FLOAT /////////////////////////////////////
